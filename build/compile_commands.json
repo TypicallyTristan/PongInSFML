@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/tristan/Documents/projects/sfmltest/build",
+  "command": "/usr/bin/clang++  -isystem /opt/homebrew/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/sfmltest.dir/main.cpp.o -c /Users/tristan/Documents/projects/sfmltest/main.cpp",
+  "file": "/Users/tristan/Documents/projects/sfmltest/main.cpp",
+  "output": "CMakeFiles/sfmltest.dir/main.cpp.o"
+}
+]

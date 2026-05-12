@@ -1,0 +1,3 @@
+/Users/tristan/Documents/projects/sfmltest/build/CMakeFiles/sfmltest.dir
+/Users/tristan/Documents/projects/sfmltest/build/CMakeFiles/edit_cache.dir
+/Users/tristan/Documents/projects/sfmltest/build/CMakeFiles/rebuild_cache.dir
