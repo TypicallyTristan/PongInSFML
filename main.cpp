@@ -25,35 +25,27 @@ int main()
     float winX = 800;
     float winY = 600;
 
-    sf::Vector2f rectSize = {200.f, 100.f};
-    float totalTime = 0.f;
-    float xSpeed = 150.f;
-    float amplitude = 100.f;
-    float frequency = 5.f;
-    float radius = 100.f;
+    sf::Vector2f rectSize = {50.f, 100.f};
 
-    float angle = 0.f;
-    sf::RectangleShape playerLeft = createRectangle({50.f, 100.f}, sf::Color::Green);
-    sf::RectangleShape rectangle = createRectangle(rectSize, sf::Color::Red);
-    sf::RectangleShape rect2 = createRectangle({50.f, 50.f}, sf::Color::Cyan);
-    sf::CircleShape circle = createCircle(radius, sf::Color::Red);
-    sf::RectangleShape rectangle2 = createRectangle(rectSize, sf::Color::Red);
-    sf::CircleShape circle2 = createCircle(radius, sf::Color::Green);
 
+    // Shapes
+    sf::RectangleShape playerLeft = createRectangle(rectSize, sf::Color::Green);
+    sf::RectangleShape playerRight = createRectangle({50.f, 100.f}, sf::Color::Red);
+    sf::RectangleShape ball = createRectangle({50.f, 50.f}, sf::Color::Cyan);
+    
     // Starting positions for rectangle. (Corner)
-    float startX = (-winX / 2) + (rect2.getSize().x / 2);
-    float startY = (-winY / 2) + (rect2.getSize().y / 2);
-    float endX = (winX / 2) - (rect2.getSize().x / 2);
-    float endY = (winY / 2) - (rect2.getSize().y / 2);
+    float startX = (-winX / 2) + (ball.getSize().x / 2);
+    float startY = (-winY / 2) + (ball.getSize().y / 2);
+    float endX = (winX / 2) - (ball.getSize().x / 2);
+    float endY = (winY / 2) - (ball.getSize().y / 2);
 
-    // slope of line
+    // slope of line y = mx + b
     float transformSlopeX = 0;
     float transformSlopeY = 0;
     float m = (endY - startY - transformSlopeY) / (endX - startX - transformSlopeX);
     float b = startY - (startX * m);
     float rx = startX;
     float rSpeed = 200.f;
-
     rx = 0;
 
     // Start the window loop
@@ -71,25 +63,16 @@ int main()
         window.clear(sf::Color::White);
         window.setView(view);
 
-        // Physics
-        float totalTime = totalTime + dt;
+    // Physics
 
-        // Move a circle about the origin 0,0
-
-        // Constantly update theta
-        float angle = angle + dt;
-
-        // Calculate change in x
-        float x = radius * cos(angle);
-
-        // Calculate change in y
-        float y = radius * sin(angle);
 
         // Movement of ball
         // have rx constantly update and ry update based on rx
         rx = rx + rSpeed * dt;
         float ry = (rx * m) + b;
 
+
+        // Collision checking between ball and boundaries.
         if (rx < startX || rx > endX)
         {
             rSpeed = -rSpeed;
@@ -103,36 +86,48 @@ int main()
         }
 
         // Collision checking of player and ball
-
-        // if distance from origing of left rectangs is less than half the width
+        // if distance from origin of left/right rectangle and the origin of the ball is less than half the width
         // then there is a collison and flip the signs
 
-        if (startX + (rect2.getSize().x) >= rx)
+            // Left player
+        if (startX + (ball.getSize().x) >= rx)
+        {
+            rSpeed = -rSpeed;
+            m = -m;
+            b = ry - (rx * m);
+        }
+            // Right Player
+        if(endX - (ball.getSize().x) <= rx)
         {
             rSpeed = -rSpeed;
             m = -m;
             b = ry - (rx * m);
         }
 
-        rect2.setPosition({rx, ry});
+        ball.setPosition({rx, ry});
         playerLeft.setPosition({startX, ry});
+        playerRight.setPosition({endX, ry});
+        
+        // check for key press up or down.
+        
+
+        // Movement of left player up and down.
         if (ry < startY || ry > endY)
         {
             playerLeft.setPosition({startX, ry});
         }
+        // Movement of rig
+        if (ry < startY || ry > endY)
+        {
+            playerRight.setPosition({endX, ry});
+        }
 
         std::cout << "X: " << rx << " Y: " << ry << " M: " << m << " B: " << b << "         " << ry << " = " << m << "(" << rx << ")" << " + " << b << std::endl;
 
-            // Apply Physics
-            // rectangle.setPosition({x, y});
-            circle2.setPosition({x, y});
-        circle.move(sf::Vector2f(x, y));
-        rectangle.rotate(sf::degrees((x + y) * dt));
-
         // Render
         window.draw(playerLeft);
-        window.draw(rectangle);
-        window.draw(rect2);
+        window.draw(playerRight);
+        window.draw(ball);
         window.display();
     }
 }
